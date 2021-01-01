@@ -1,0 +1,31 @@
+.header{
+    background: #000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    /*text-align: center;*/
+}
+.wrapper{
+    /*border: 1px solid white;*/
+    display: flex;
+    max-width: 1000px;
+    /*height: 50px;*/
+    margin: 0 auto;
+    justify-content: space-around;
+    align-items: center;
+}
+.header a{
+    font-size: 20px;
+    color: #FAE7B5;
+    outline: none;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border: 2px solid rgba(0,0,0,0)
+}
+.header a:hover{
+    border-bottom-color: red;
+}
+a.active{
+    color: red;
+}

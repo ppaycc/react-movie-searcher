@@ -1,11 +1,6 @@
-
-
-const Card = props => {
-    return (
-        <div>
-            Card
-        </div>
-    )
+.card{
+    border: 1px solid grey;
 }
-
-export default Card;
+.card img{
+    width: 100%;
+}

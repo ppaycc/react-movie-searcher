@@ -1,14 +1,5 @@
-import Card from "../Common/Card";
-
-const TrendingPage = props => {
-    return (
-        <div className={s.trendign}>
-            Trending
-            <Card />
-            <Card />
-            <Card />
-        </div>
-    )
+.items{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
 }
-
-export default TrendingPage;
