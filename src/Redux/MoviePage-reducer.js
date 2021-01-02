@@ -1,30 +1,47 @@
 import * as axios from "axios";
 
-const SET_NEW_PAGE = 'SET_NEW_PAGE';
-const SET_NEW_VALUE = 'SER_NEW_VALUE';
-const CHANGE_NEW_QUERY = 'CHANGE_NEW_QUERY';
+const SET_NEW_RESULT = 'SET_NEW_RESULT';
+const SET_TOTAL_PAGE = 'SET_TOTAL_PAGE';
+const CHANGE_VALUE_MOVIE = 'CHANGE_VALUE_MOVIE';
+const NOT_FOUND = 'NOT_FOUND';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 
 const initialState = {
-    text: 'matrix',
+    query: '',
+    sought: '',
+    textForPagination: '',
     currentPage: 1,
-    allPage: 0,
+    totalPage: '',
     result: [],
-    firstRequest: `https://api.themoviedb.org/3/trending/movie/day?api_key=7f3d862c78d7078a1d152442970fcce6`,
-    searchRequest: 'https://api.themoviedb.org/3/search/movie?api_key=7f3d862c78d7078a1d152442970fcce6&language=en-US'
+    noResult: `You can find something`,
+    url: 'https://api.themoviedb.org/3/search/movie?api_key=7f3d862c78d7078a1d152442970fcce6&language=en-US'
 }
 
 const MovieReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_NEW_VALUE :{
+        case SET_NEW_RESULT :{
             return {
-                ...state,
-                text: '',
-                result: [...action.result]
+                ...state, result: [...action.result], sought: action.query, query: ''
             }
         }
-        case CHANGE_NEW_QUERY :{
+        case SET_TOTAL_PAGE :{
             return {
-                ...state, text: action.value
+                ...state, totalPage: action.page
+            }
+        }
+        case CHANGE_VALUE_MOVIE :{
+            return {
+                ...state, query: action.value
+            }
+        }
+        case NOT_FOUND :{
+            return {
+                ...state, noResult: "I couldn't find it. Try again"
+            }
+        }
+        case SET_CURRENT_PAGE :{
+            return {
+                ...state, currentPage: action.page
             }
         }
         default : {
@@ -32,20 +49,34 @@ const MovieReducer = (state = initialState, action) => {
         }
     }
 }
-
-const setNewPageAC = result => {
-    return {type: SET_NEW_VALUE, result}
+const setNewResult = (result, query) => {
+    return {type: SET_NEW_RESULT, result, query }
 }
-export const changeQueryAC = value =>{
-    return {type:CHANGE_NEW_QUERY, value}
+const setTotalPage = page => {
+    return {type: SET_TOTAL_PAGE, page}
+}
+export const changeValueMovie = value => {
+    return {type: CHANGE_VALUE_MOVIE, value}
+}
+const notFound = () => {
+    return {type: NOT_FOUND}
+}
+const setCurrentPage = page => {
+    return {type:SET_CURRENT_PAGE, page}
 }
 export const getNewItems = (url, query="", page=1) => {
     return dispatch => {
         let Q = query.length>0 ? `&query=${query}` : '';
-        console.log(Q);
-        console.log(url + "&page=" + page + Q)
         axios.get(url + "&page=" + page + Q).then(response => {
-            dispatch(setNewPageAC(response.data.results));
+            if (response.data.results.length === 0){
+                dispatch(notFound());
+                dispatch(setTotalPage(''))
+                dispatch(setNewResult([], query));
+            } else {
+                dispatch(setCurrentPage(page))
+                dispatch(setNewResult(response.data.results, query));
+                dispatch(setTotalPage(response.data.total_pages));
+            }
         })
     }
 }

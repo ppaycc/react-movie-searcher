@@ -6,11 +6,11 @@ const Card = props => {
     let poster = props.poster ? `https://image.tmdb.org/t/p/original${props.poster}` : img;
     return (
         <div className={s.card}>
-            <NavLink to={`/${props.path}/${props.id}`}>
+            <NavLink to={`/${props.path}`}>
                 <img src={poster} />
             </NavLink>
             <div>{props.title}</div>
-            <div>{props.date.replace(/-/g, "/")}</div>
+            <div>{props.date ? props.date.replace(/-/g, "/") : ''}</div>
         </div>
     )
 }

@@ -1,0 +1,65 @@
+.items{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+.input{
+    /*background: #000;*/
+    margin: 10px 0;
+}
+.input input, .input button{
+    background: none;
+    border: 2px solid white;
+    color: white;
+    padding: 5px 10px;
+}
+.input button{
+    border-left: none;
+}
+.pages{
+    display: inline-block;
+    max-width: 80%;
+    /*align-items: center;*/
+}
+.flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.paginationContainerItem{
+    width: 400px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.paginationItem, .paginationItemActive{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    /*display: inline-block;*/
+    /*padding: 5px;*/
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    /*border-radius: 10px;*/
+    border: 2px solid white;
+}
+.paginationItem:hover, .paginationItemActive:hover, .paginationBtn:hover{
+    cursor: pointer;
+}
+.paginationItem:focus, .paginationItemActive:focus, .paginationBtn:focus{
+    outline: none
+}
+.paginationItemActive{
+    border-color: red;
+}
+.paginationBtn{
+    margin: 5px;
+    background: none;
+    border: 2px solid white;
+    /*border-radius: 10px;*/
+    color: white;
+}
+.paginationBtn:disabled{
+    border-color: grey;
+    color: grey;
+}
