@@ -1,0 +1,13 @@
+.input{
+  /*background: #000;*/
+  margin: 10px 0;
+}
+.input input, .input button{
+  background: none;
+  border: 2px solid white;
+  color: white;
+  padding: 5px 10px;
+}
+.input button{
+  border-left: none;
+}

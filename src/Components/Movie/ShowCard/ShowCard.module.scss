@@ -37,6 +37,11 @@ img.imgBg{
     gap: 20px;
     grid-template-columns: 1fr 2fr;
 }
+@media (max-width: 500px){
+    .main{
+        display: block;
+    }
+}
 img.poster{
     border-radius: 20px;
     width: 100%;

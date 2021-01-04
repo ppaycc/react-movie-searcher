@@ -3,6 +3,16 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 10px;
 }
+@media (max-width: 1000px){
+    .items{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+@media (max-width: 700px){
+    .items{
+        grid-template-columns: 1fr 1fr;
+    }
+}
 .input{
     /*background: #000;*/
     margin: 10px 0;
@@ -27,7 +37,7 @@
     align-items: center;
 }
 .paginationContainerItem{
-    width: 400px;
+    //width: 400px;
     display: inline-block;
     margin-bottom: 10px;
 }
