@@ -1,0 +1,16 @@
+.main{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    padding-top: 10px;
+}
+.favoriteBtn{
+    width: calc(100% - 4px);
+    background: rgba(128, 0 ,0 ,0.5);
+    color: white;
+    border: none;
+    transform: translateY(-23px) translateX(2px);
+}
+.hidden{
+    overflow: hidden;
+}

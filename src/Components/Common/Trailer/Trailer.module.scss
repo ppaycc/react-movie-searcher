@@ -1,11 +1,34 @@
-const Trailer = props => {
-    return (
-        <div>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/KCR7vjxMPSs" frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen></iframe>
-        </div>
-    )
+.main {
+  margin: 0 0 20px 0;
+  h2{
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .flex{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    a{
+      margin:5px;
+      color: white;
+      transition: .3s;
+      text-decoration: none;
+      //border: 1px solid red;
+      //&:visited{
+      //  color: grey;
+      //  &:hover{
+      //    color: #ccc;
+      //  }
+      //}
+      &:hover{
+        color: grey;
+      }
+    }
+  }
+  //margin: 0 auto;
+  //width: 80%;
+  //background: #000;
+  //height: 500px;
+  //margin: -10%;
+  //position: relative;
 }
-
-export default Trailer;

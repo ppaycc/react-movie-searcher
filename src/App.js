@@ -1,21 +1,24 @@
 import './App.scss';
 import Header from "./Components/Header/Header";
-import {Route} from "react-router-dom";
+import {Redirect, Route} from "react-router-dom";
 import React from "react";
 import MoviePage from "./Components/Movie/Movie";
-import ShowCard from "./Components/Common/ShowCard";
-import TrendingPage from "./Components/Trending/Trending";
+import ShowCard from "./Components/Movie/ShowCard/ShowCard";
+import Favorite from "./Components/Favorite/Favorite";
 
 function App() {
   return (
     <div className="App">
         <Header />
         <div className="block">
-        <Route  path='/trending/:path?' render={()=> <TrendingPage/>} />
-        <Route exact path='/tvshow/:path?' render={()=> <TrendingPage/>} />
 
         <Route exact path='/movie' render={()=> <MoviePage/>} />
         <Route exact path='/movie/:path' render={()=> <ShowCard/>} />
+
+        <Route exact path='/favorite' render={()=> <Favorite/> } />
+
+        <Route exact path='/' render={()=> <Redirect to='/movie'/> }/>
+
         </div>
     </div>
   );

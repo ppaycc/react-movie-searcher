@@ -1,6 +1,13 @@
-.card{
-    border: 1px solid grey;
+.favorite{
+    border: 2px solid green;
+}
+.noFavorite{
+    border: 1px solid red;
 }
 .card img{
     width: 100%;
+}
+.card{
+    height: 100%;
+    overflow: hidden;
 }
