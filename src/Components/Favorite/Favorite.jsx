@@ -37,7 +37,6 @@ const Favorite = (props) => {
 
     return(
         <div className={s.main}>
-
             {items.length>0 ? items : <p>You don't have favorites movie</p>}
         </div>
     )

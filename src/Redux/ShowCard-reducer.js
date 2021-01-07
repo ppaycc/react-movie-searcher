@@ -3,10 +3,12 @@ import * as axios from "axios";
 const SET_RESULT = 'SET_RESULT';
 const SET_FETCHING = 'SET_FETCHING';
 const SET_TRAILER = 'SET_TRAILER';
+const SET_RECOMMENDED = 'SET_RECOMMENDED';
 
 const initialState = {
     result: {},
     trailer: [],
+    recommendations: [],
     isFetching: false
 }
 
@@ -23,6 +25,11 @@ const showReducer = (state = initialState, action) => {
         case SET_FETCHING :{
             return {
                 ...state, isFetching: !state.isFetching
+            }
+        }
+        case SET_RECOMMENDED :{
+            return {
+                ...state, recommendations: action.payload
             }
         }
         default : {
@@ -64,5 +71,18 @@ export const setTrailerThunk = id => {
             })
     }
 }
+const setRecommended = (payload) => {
+    return {type: SET_RECOMMENDED, payload}
+}
+export const getRecommendedThunk = (type, id, page = 1) => {
+    return dispatch => {
+        axios.get(`https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=7f3d862c78d7078a1d152442970fcce6&language=en-US&page=${page}
+`)
+            .then(response=> {
+                dispatch(setRecommended(response.data.results))
+            })
+    }
+}
+// https://api.themoviedb.org/3/movie/603/recommendations?api_key=7f3d862c78d7078a1d152442970fcce6&language=en-US&page=1
 
 export default showReducer;
