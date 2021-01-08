@@ -4,11 +4,13 @@ const SET_RESULT = 'SET_RESULT';
 const SET_FETCHING = 'SET_FETCHING';
 const SET_TRAILER = 'SET_TRAILER';
 const SET_RECOMMENDED = 'SET_RECOMMENDED';
+const SET_TOTAL_PAGE_RECOMMENDED = 'SET_TOTAL_PAGE_RECOMMENDED';
 
 const initialState = {
     result: {},
     trailer: [],
     recommendations: [],
+    totalRecommendedPage: 1,
     isFetching: false
 }
 
@@ -29,7 +31,12 @@ const showReducer = (state = initialState, action) => {
         }
         case SET_RECOMMENDED :{
             return {
-                ...state, recommendations: action.payload
+                ...state, recommendations: [...action.payload]
+            }
+        }
+        case SET_TOTAL_PAGE_RECOMMENDED :{
+            return {
+                ...state, totalRecommendedPage: action.payload
             }
         }
         default : {
@@ -74,11 +81,16 @@ export const setTrailerThunk = id => {
 const setRecommended = (payload) => {
     return {type: SET_RECOMMENDED, payload}
 }
-export const getRecommendedThunk = (type, id, page = 1) => {
+const setTotalPageRecommended = payload => {
+    return {type: SET_TOTAL_PAGE_RECOMMENDED, payload}
+}
+export const getRecommendedThunk = (type, id, page) => {
     return dispatch => {
         axios.get(`https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=7f3d862c78d7078a1d152442970fcce6&language=en-US&page=${page}
 `)
             .then(response=> {
+                debugger
+                dispatch(setTotalPageRecommended(response.data.total_pages))
                 dispatch(setRecommended(response.data.results))
             })
     }

@@ -33,6 +33,7 @@ img.imgBg{
     z-index: -1;
 }
 .main{
+    position: relative;
     display: grid;
     gap: 20px;
     grid-template-columns: 1fr 2fr;
@@ -75,4 +76,22 @@ img.poster{
         border-radius: 20px;
         //box-shadow: inset 1px 1px 10px #f3faf7;
     }
+}
+.addBtn{
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 2px solid white;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.addRecommended{
+    border: 1px solid white;
+    border-radius: 5px;
+    background: rgba(0,0,0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    //margin: auto 0;
 }

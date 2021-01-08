@@ -6,7 +6,7 @@ import {getRecommendedThunk, setResultThunk, setTrailerThunk} from "../../../Red
 import poster from '../../Common/photo_2020-12-28_16-51-34.jpg';
 import Preloader from "../../Common/Preloader";
 import Trailer from "../../Common/Trailer/Trailer";
-import {getFavorites, setFavorite} from "../../../Redux/Favorite-reducer";
+import {deleteFavoriteItem, getFavorites, setFavorite} from "../../../Redux/Favorite-reducer";
 import Card from "../../Common/Card/Card";
 
 const ShowCard = props => {
@@ -16,45 +16,45 @@ const ShowCard = props => {
     const trailer = useSelector(state => state.showInfo.trailer);
     const favorites = useSelector(state => state.favorites.favorites);
     const recommendations = useSelector(state => state.showInfo.recommendations);
-    const state = useSelector(state => state.favorites);
-    console.log(state)
+    const totalRecommendedPage = useSelector(state => state.showInfo.totalRecommendedPage);
 
     const type = props.match.params.path.split('-')[0];
     const id = parseInt(props.match.params.path.split('-')[1]);
 
 
-    // useEffect(() => {
-    //     window.scrollTo(0, 0,);
-    //     dispatch(setResultThunk(type, id));
-    //     dispatch(setTrailerThunk(id));
-    //     dispatch(getRecommendedThunk(type, id));
-    // }, [])
+    const isFavorite = favorites.some(item=> item.id===id);
+    const [fv, setFv] = useState(isFavorite);
     useEffect(() => {
         window.scrollTo(0, 0,);
         dispatch(setResultThunk(type, id));
         dispatch(setTrailerThunk(id));
-        dispatch(getRecommendedThunk(type, id));
+        dispatch(getRecommendedThunk(type, id, pageRecommended));
         dispatch(getFavorites());
-    }, [type, id])
+        if (fv !== isFavorite){
+            setFv(fv => !fv);
+        }
+    }, [type, id, isFavorite])
     const addToFavorite = (type, id) => {
         dispatch(setFavorite(type, id))
         setFv(fv => !fv);
     }
-    const isFavorite = favorites.some(item=> item.id===id);
-    const [fv, setFv] = useState(isFavorite);
-    if (fv !== isFavorite){
-        setFv(fv => !fv);
-    }
-    // console.log(favorites.length>0 && isFavorite ? "false" : "true")
-    console.log(favorites)
+    const [pageRecommended, setPageRecommended] = useState(1);
+    useEffect(()=>{
+        dispatch(getRecommendedThunk(type, id, pageRecommended));
+    }, [pageRecommended, type, id, dispatch])
+
+
     console.log("isFavorite",isFavorite, "fv", fv);
     let posterLink = 'https://image.tmdb.org/t/p/original' + data.poster_path;
     return (
         <>
-            {fv || <button onClick={() => addToFavorite(type, id)}>Add to favorite</button>}
+
             {isFetching && <Preloader/>}
             <div className={s.mt10} key={Date.now()}>
                 <div className={s.main}>
+                    {fv ? <button className={s.addBtn} onClick={() => dispatch(deleteFavoriteItem(id))}>Delete from favorite</button>
+                    : <button className={s.addBtn} onClick={() => addToFavorite(type, id)}>Add to favorite</button>
+                    }
                     <img src={data.poster_path ? posterLink : poster} className={s.poster}/>
                     <div className={s.description}>
                         <h2>{data.title}</h2>
@@ -62,7 +62,7 @@ const ShowCard = props => {
                         {data.overview && <p><b>Overview:</b> {data.overview}</p>}
                         {data.genres && <p><b>Genres:</b> {data.genres.map(item => item.name).join(", ")}</p>}
                         {data.runtime>0 && <p><b>Runtime:</b> {data.runtime}</p>}
-                        {data.release_date && <p><b>Release date:</b> {data.release_date.replace(/-/g, ".")}</p>}
+                        {data.release_date && <p><b>Release date:</b> {data.release_date.split('-').reverse().join('.')}</p>}
                         <p><b>Status:</b> {data.status}</p>
                         <p><b>For adult:</b> {data.adult ? "YES" : "NO"}</p>
                         {data.original_language && <p><b>Original language:</b> {data.original_language.toUpperCase()}
@@ -94,6 +94,7 @@ const ShowCard = props => {
                             />
                     </div>
                 })}
+                {pageRecommended === totalRecommendedPage || <button className={s.addRecommended} onClick={()=>setPageRecommended(pageRecommended + 1)}>Show more</button>}
             </div></>}
         </>
     )
