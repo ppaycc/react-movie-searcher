@@ -2,7 +2,7 @@ import s from './ShowCard.module.scss';
 import React, {useEffect, useState} from "react";
 import {withRouter} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {getRecommendedThunk, setResultThunk, setTrailerThunk} from "../../../Redux/ShowCard-reducer";
+import {getRecommendedAndSimilarThunk, setResultThunk, setTrailerThunk} from "../../../Redux/ShowCard-reducer";
 import poster from '../../Common/photo_2020-12-28_16-51-34.jpg';
 import Preloader from "../../Common/Preloader";
 import Trailer from "../../Common/Trailer/Trailer";
@@ -16,11 +16,12 @@ const ShowCard = props => {
     const trailer = useSelector(state => state.showInfo.trailer);
     const favorites = useSelector(state => state.favorites.favorites);
     const recommendations = useSelector(state => state.showInfo.recommendations);
+    const similar = useSelector(state => state.showInfo.similar);
     const totalRecommendedPage = useSelector(state => state.showInfo.totalRecommendedPage);
+    const totalSimilarPage = useSelector(state => state.showInfo.totalSimilarPage);
 
     const type = props.match.params.path.split('-')[0];
     const id = parseInt(props.match.params.path.split('-')[1]);
-
 
     const isFavorite = favorites.some(item=> item.id===id);
     const [fv, setFv] = useState(isFavorite);
@@ -28,20 +29,23 @@ const ShowCard = props => {
         window.scrollTo(0, 0,);
         dispatch(setResultThunk(type, id));
         dispatch(setTrailerThunk(id));
-        dispatch(getRecommendedThunk(type, id, pageRecommended));
+        dispatch(getRecommendedAndSimilarThunk(type, id, pageRecommended, pageSimilar));
         dispatch(getFavorites());
+        setPageRecommended(pageRecommended => 1);
+        setPageSimilar(pageSimilar => 1);
         if (fv !== isFavorite){
             setFv(fv => !fv);
         }
-    }, [type, id, isFavorite])
+    }, [type, id, isFavorite, dispatch])
     const addToFavorite = (type, id) => {
         dispatch(setFavorite(type, id))
         setFv(fv => !fv);
     }
     const [pageRecommended, setPageRecommended] = useState(1);
+    const [pageSimilar, setPageSimilar] = useState(1);
     useEffect(()=>{
-        dispatch(getRecommendedThunk(type, id, pageRecommended));
-    }, [pageRecommended, type, id, dispatch])
+        dispatch(getRecommendedAndSimilarThunk(type, id, pageRecommended, pageSimilar));
+    }, [pageRecommended, pageSimilar, type, id, dispatch])
 
 
     console.log("isFavorite",isFavorite, "fv", fv);
@@ -53,8 +57,7 @@ const ShowCard = props => {
             <div className={s.mt10} key={Date.now()}>
                 <div className={s.main}>
                     {fv ? <button className={s.addBtn} onClick={() => dispatch(deleteFavoriteItem(id))}>Delete from favorite</button>
-                    : <button className={s.addBtn} onClick={() => addToFavorite(type, id)}>Add to favorite</button>
-                    }
+                    : <button className={s.addBtn} onClick={() => addToFavorite(type, id)}>Add to favorite</button>}
                     <img src={data.poster_path ? posterLink : poster} className={s.poster}/>
                     <div className={s.description}>
                         <h2>{data.title}</h2>
@@ -80,7 +83,7 @@ const ShowCard = props => {
                 }
             </div>
             {trailer.length>0 && <Trailer trailer={trailer}/>}
-            {recommendations.length>0 && <> <h2>Recommendations</h2><div className={s.recommendations}>
+            {recommendations.length>0 && <> <h2>recommendations</h2><div className={s.recommendations}>
                 {recommendations.map(item=>{
                     const isInFavorite = favorites.some(fa=> fa.id===item.id);
                     return <div className={s.recommendationsItem} key={item.id}>
@@ -96,6 +99,23 @@ const ShowCard = props => {
                 })}
                 {pageRecommended === totalRecommendedPage || <button className={s.addRecommended} onClick={()=>setPageRecommended(pageRecommended + 1)}>Show more</button>}
             </div></>}
+            {similar.length>0 && <> <h2>Similar</h2><div className={s.recommendations}>
+                {similar.map(item=>{
+                    const isInFavorite = favorites.some(fa=> fa.id===item.id);
+                    return <div className={s.recommendationsItem} key={item.id}>
+                        <Card
+                            date={item['release_date']}
+                            title={item['title']}
+                            id={item.id}
+                            poster={item["poster_path"]}
+                            path={`movie/movie-${item.id}`}
+                            favorite={isInFavorite}
+                        />
+                    </div>
+                })}
+                {pageSimilar === totalSimilarPage || <button className={s.addRecommended} onClick={()=>setPageSimilar(pageSimilar + 1)}>Show more</button>}
+            </div></>}
+
         </>
     )
 }
